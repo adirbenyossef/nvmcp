@@ -1,0 +1,46 @@
+{
+  "name": "nvmcp",
+  "version": "1.0.0",
+  "description": "Node Version Manager for Model Context Protocol (MCP) - A lightweight package manager for MCP servers and clients",
+  "main": "lib/index.js",
+  "bin": {
+    "nvmcp": "bin/nvmcp"
+  },
+  "scripts": {
+    "start": "node lib/index.js",
+    "test": "node test/index.js",
+    "lint": "eslint . --fix",
+    "lint:check": "eslint .",
+    "prepublishOnly": "npm run lint:check && npm test"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "package-manager",
+    "ai",
+    "claude",
+    "cursor",
+    "cli"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "README.md",
+    "LICENSE"
+  ],
+  "devDependencies": {},
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/nvmcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/nvmcp/issues"
+  },
+  "homepage": "https://github.com/yourusername/nvmcp#readme"
+}

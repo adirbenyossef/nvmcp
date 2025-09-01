@@ -6,7 +6,7 @@ const os = require('os');
 const { parseArgs } = require('../lib/cli');
 const { colors } = require('../lib/utils/colors');
 const { encrypt, decrypt, isSensitiveKey } = require('../lib/utils/crypto');
-const { getConfig} = require('../lib/utils/config');
+const { getConfig, initialize } = require('../lib/utils/unified-config');
 
 console.log(colors.cyan('Running nvmcp tests...\n'));
 
@@ -81,12 +81,13 @@ test('Crypto - sensitive key detection', () => {
 });
 
 test('Config - default configuration', () => {
+  initialize();
   const config = getConfig();
   assert.ok(config.version);
-  assert.ok(config.registries);
-  assert.ok(config.tools);
-  assert.ok(config.tools.claude);
-  assert.ok(config.tools.cursor);
+  assert.ok(config.settings);
+  assert.ok(config.integrations);
+  assert.ok(config.integrations.claude);
+  assert.ok(config.integrations.cursor);
 });
 
 test('HTTP client - URL validation', () => {

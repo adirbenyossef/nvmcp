@@ -1,22 +1,20 @@
 # nvmcp - Node Version Manager for Model Context Protocol
 
-Initial commit: Establishing the master branch with the README.md file.
-
 [![npm version](https://badge.fury.io/js/nvmcp.svg)](https://badge.fury.io/js/nvmcp)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A lightweight package manager for Model Context Protocol (MCP) servers and clients. Think "nvm for MCP servers" - nvmcp makes it simple to install, configure, and manage MCP servers for AI tools like Claude, Cursor, and custom AI agents.
+Simple tag-based MCP management CLI. Install, configure, and manage Model Context Protocol servers for AI tools like Claude Desktop, Cursor, and VS Code using an intuitive tag-based workflow.
 
 ## Features
 
-✨ **Simple Installation** - Install MCP servers from npm or GitHub with one command  
-🔧 **Easy Configuration** - Interactive setup with secure credential storage  
-🔄 **Profile Management** - Tag and switch between different configurations  
-🤖 **AI Tool Integration** - Native support for Claude Desktop, Cursor, and VS Code  
-🛡️ **Secure Storage** - Encrypted credential storage using OS keychain  
-🩺 **Health Diagnostics** - Built-in doctor command for troubleshooting  
-🌐 **Remote Servers** - Support for cloud-hosted AI agents  
+✨ **Simple Installation** - Add MCP servers from npm, GitHub, or remote URLs  
+🏷️ **Tag-Based Management** - Organize MCPs into tags for different environments  
+🔄 **Easy Switching** - Switch between tag configurations instantly  
+🤖 **AI Tool Integration** - Export configurations for Claude Desktop, Cursor, and VS Code  
+🛡️ **Secure Storage** - Encrypted credential storage  
+⚡ **Process Management** - Start, stop, and monitor MCP processes  
+🌐 **Multiple Sources** - Support for npm packages, GitHub repos, and remote servers  
 
 ## Quick Start
 
@@ -24,58 +22,49 @@ A lightweight package manager for Model Context Protocol (MCP) servers and clien
 
 ```bash
 npm install -g nvmcp
-# or
-yarn global add nvmcp
 ```
 
-### Initialize nvmcp
+### Create your first tag and add an MCP
 
 ```bash
-nvmcp init
-```
+# Create a development tag
+nvmcp create development
 
-### Install and configure your first MCP server
+# Add an MCP from npm
+nvmcp add npm:@modelcontextprotocol/server-filesystem
 
-```bash
-# Install from npm
-nvmcp install awesome-coralogix-mcp
+# Add an MCP from GitHub
+nvmcp add github:lharries/whatsapp-mcp
 
-# Install from GitHub
-nvmcp install --repo=github:anthropic/mcp-server-example
+# Start the MCPs
+nvmcp start
 
-# Configure the server
-nvmcp config awesome-coralogix-mcp
-
-# Activate for Claude Desktop
-nvmcp use awesome-coralogix-mcp --claude
+# Export to Claude Desktop
+nvmcp use development --claude
 ```
 
 ## Commands
 
-### Core Commands
+### Tag Management
 
-#### `nvmcp init`
-Initialize nvmcp directory structure and configuration.
-
-```bash
-nvmcp init
-```
-
-#### `nvmcp install <package>` (alias: `i`)
-Install an MCP server from npm or GitHub.
+#### `nvmcp create <tag>`
+Create a new tag configuration.
 
 ```bash
-nvmcp install awesome-coralogix-mcp
-nvmcp install --repo=github:anthropic/mcp-server-example
-nvmcp install my-server --tag=production
+nvmcp create development
+nvmcp create production --description="Production environment"
 ```
 
-**Options:**
-- `--repo=<repo>` - Install from GitHub repository (format: `github:owner/repo`)
-- `--tag=<tag>` - Tag the installation with a profile name
+#### `nvmcp use <tag>`
+Switch to a tag configuration.
+
+```bash
+nvmcp use development
+nvmcp use production --claude  # Also export to Claude Desktop
+```
 
 #### `nvmcp list` (alias: `ls`)
-List all installed MCP servers with their status.
+List all tag configurations.
 
 ```bash
 nvmcp list
@@ -83,84 +72,68 @@ nvmcp list
 
 Output example:
 ```
-Name                 Version  Status                    Description
-awesome-coralogix    1.2.3    active [remote]          Coralogix MCP server
-github-mcp           2.0.0    configured               GitHub integration
-frontend-agent       3.1.0    error: missing config    Frontend development agent
+Tag          Status    MCPs        Description
+development  active    2 MCP(s)    Development environment
+production   inactive  1 MCP(s)    Production environment
 ```
 
-#### `nvmcp config <server>`
-Configure an MCP server with interactive prompts.
+#### `nvmcp delete <tag>`
+Delete a tag configuration.
 
 ```bash
-nvmcp config awesome-coralogix-mcp
-nvmcp config my-server --command="node server.js"
-nvmcp config my-server --env="API_KEY=your-key"
-nvmcp config my-server --tag=production
+nvmcp delete old-tag
 ```
 
-**Options:**
-- `--command=<cmd>` - Set custom run command
-- `--env=<KEY=value>` - Set environment variable
-- `--tag=<tag>` - Create/update tagged profile
+### MCP Management
 
-#### `nvmcp use <profile|server>`
-Activate a configuration profile or server.
+#### `nvmcp add <source>`
+Add an MCP to the active tag.
 
 ```bash
-nvmcp use production
-nvmcp use awesome-coralogix-mcp --claude
-nvmcp use my-profile --cursor
+nvmcp add npm:@modelcontextprotocol/server-filesystem
+nvmcp add github:lharries/whatsapp-mcp
+nvmcp add https://example.com/mcp-server
 ```
 
-**Options:**
-- `--claude` - Export configuration for Claude Desktop
-- `--cursor` - Export configuration for Cursor IDE  
-- `--vscode` - Export configuration for VS Code
-
-#### `nvmcp run <server>`
-Start an MCP server.
+#### `nvmcp remove <mcp-name>`
+Remove an MCP from the active tag.
 
 ```bash
-nvmcp run awesome-coralogix-mcp
-nvmcp run my-server --daemon
-nvmcp run production-profile
+nvmcp remove filesystem-server
 ```
 
-**Options:**
-- `--daemon` - Run as background daemon
+### Process Management
 
-#### `nvmcp doctor`
-Diagnose configuration and connectivity issues.
+#### `nvmcp start [tag]`
+Start MCPs from active tag or specified tag.
 
 ```bash
-nvmcp doctor
+nvmcp start
+nvmcp start production
 ```
 
-Output example:
-```
-✓ nvmcp installation OK
-✓ awesome-coralogix-mcp - Connected
-✗ github-mcp - Error: Invalid Access Key  
-✓ frontend-agent - Remote agent accessible
-```
-
-### Management Commands
-
-#### `nvmcp uninstall <server>` (alias: `rm`)
-Remove an installed MCP server.
+#### `nvmcp stop [tag]`
+Stop MCPs from active tag or specified tag.
 
 ```bash
-nvmcp uninstall old-server
+nvmcp stop
+nvmcp stop production
 ```
 
-#### `nvmcp update [server]`
-Update an MCP server to the latest version.
+#### `nvmcp ps`
+List running MCP processes.
 
 ```bash
-nvmcp update awesome-coralogix-mcp  # Update specific server
-nvmcp update                        # Check all servers for updates
+nvmcp ps
 ```
+
+#### `nvmcp kill <process-id>`
+Kill a specific MCP process.
+
+```bash
+nvmcp kill filesystem-server-1234
+```
+
 
 ## Configuration
 
@@ -170,47 +143,35 @@ nvmcp stores all data in `~/.nvmcp/`:
 
 ```
 ~/.nvmcp/
-├── servers/          # Installed MCP server packages
-├── configs/          # Configuration files for each server  
-├── profiles/         # Tagged configuration profiles
+├── configs/          # Tag configuration files
+├── cache/            # Cached MCP sources
 ├── config.json       # Global nvmcp configuration
-├── active.json       # Currently active configuration
+├── active-tag.json   # Currently active tag
+├── running.json      # Running process information
 └── .key             # Master encryption key
 ```
 
-### Server Configuration
+### Tag Configuration
 
-Each server has a configuration file in `~/.nvmcp/configs/<server-name>.json`:
+Each tag has a configuration file in `~/.nvmcp/configs/<tag-name>.json`:
 
 ```json
 {
-  "name": "awesome-coralogix-mcp",
-  "version": "1.2.3",
-  "type": "local",
-  "command": "node index.js",
-  "env": {
-    "API_KEY": "[encrypted]",
-    "ENDPOINT": "https://api.coralogix.com"
+  "name": "development",
+  "version": "2.0.0",
+  "description": "Development environment",
+  "created": "2023-12-01T10:00:00.000Z",
+  "updated": "2023-12-01T10:30:00.000Z",
+  "mcps": {
+    "filesystem": "npm:@modelcontextprotocol/server-filesystem",
+    "whatsapp": "github:lharries/whatsapp-mcp"
   },
-  "args": ["--verbose"],
-  "capabilities": ["search", "query", "analyze"]
-}
-```
-
-### Profile Configuration
-
-Profiles group multiple servers together:
-
-```json
-{
-  "name": "production",
-  "servers": [
-    {
-      "name": "awesome-coralogix-mcp",
-      "config": "~/.nvmcp/configs/awesome-coralogix-mcp.json"
-    }
-  ],
-  "default": "awesome-coralogix-mcp"
+  "environment": {
+    "API_KEY": "[encrypted]"
+  },
+  "settings": {
+    "autoStart": false
+  }
 }
 ```
 
@@ -218,42 +179,45 @@ Profiles group multiple servers together:
 
 ### Claude Desktop
 
-nvmcp automatically configures Claude Desktop by updating:
-`~/Library/Application Support/Claude/claude_desktop_config.json`
+nvmcp can export tag configurations to AI tools:
 
 ```bash
-nvmcp use my-server --claude
+# Export to Claude Desktop
+nvmcp use development --claude
+
+# Export to Cursor IDE
+nvmcp use development --cursor
+
+# Export to VS Code
+nvmcp use development --vscode
 ```
 
-### Cursor IDE
+## Source Types
 
-Export configuration for Cursor:
+nvmcp supports multiple MCP source types:
 
+### NPM Packages
 ```bash
-nvmcp use my-server --cursor
+nvmcp add npm:@modelcontextprotocol/server-filesystem
+nvmcp add npm:my-custom-mcp
 ```
 
-### VS Code
-
-Export configuration for VS Code:
-
+### GitHub Repositories
 ```bash
-nvmcp use my-server --vscode
+nvmcp add github:owner/repo
+nvmcp add github:anthropic/mcp-server-example
 ```
 
-## Remote Servers
-
-nvmcp supports remote MCP servers hosted in the cloud:
-
+### Remote URLs
 ```bash
-nvmcp install remote-ai-agent
-nvmcp config remote-ai-agent
+nvmcp add https://example.com/mcp-server
+nvmcp add http://localhost:3000/mcp
 ```
 
-During configuration, choose "Remote server" and provide:
-- Endpoint URL
-- Transport protocol (HTTP/WebSocket)
-- Authentication details
+### Git Repositories
+```bash
+nvmcp add git+https://github.com/owner/repo.git
+```
 
 ## Security
 
@@ -274,29 +238,28 @@ The following keys are treated as sensitive:
 
 ### Common Issues
 
-**Server won't start:**
+**MCP won't start:**
 ```bash
-nvmcp doctor                    # Check system health
-nvmcp config my-server         # Reconfigure server
+nvmcp ps                       # Check running processes
+nvmcp start                    # Try starting again
 ```
 
-**Missing dependencies:**
+**Missing tag:**
 ```bash
-cd ~/.nvmcp/servers/my-server
-npm install
+nvmcp list                     # See available tags
+nvmcp create my-tag            # Create a new tag
 ```
 
-**Configuration issues:**
+**Export issues:**
 ```bash
-nvmcp doctor                   # Detailed diagnostics
-nvmcp use my-server --claude   # Re-export configuration
+nvmcp use my-tag --claude      # Re-export configuration
 ```
 
 ### Debug Mode
 
 Enable debug output:
 ```bash
-DEBUG=1 nvmcp run my-server
+DEBUG=1 nvmcp start
 ```
 
 ## Examples
@@ -304,51 +267,40 @@ DEBUG=1 nvmcp run my-server
 ### Basic Workflow
 
 ```bash
-# Initialize nvmcp
-nvmcp init
+# Create a tag
+nvmcp create development
 
-# Install a server
-nvmcp install awesome-coralogix-mcp
+# Add MCPs to the tag
+nvmcp add npm:@modelcontextprotocol/server-filesystem
+nvmcp add github:lharries/whatsapp-mcp
 
-# Configure with API key
-nvmcp config awesome-coralogix-mcp
-# Enter API key when prompted
+# Start the MCPs
+nvmcp start
 
-# Use with Claude
-nvmcp use awesome-coralogix-mcp --claude
-
-# Start the server
-nvmcp run awesome-coralogix-mcp
+# Export to Claude Desktop
+nvmcp use development --claude
 ```
 
-### Development Workflow
+### Multi-Environment Workflow
 
 ```bash
-# Install development server
-nvmcp install my-dev-server --tag=development
+# Create multiple environments
+nvmcp create development
+nvmcp create production
 
-# Configure for development
-nvmcp config my-dev-server --env="DEBUG=1"
+# Set up development
+nvmcp use development
+nvmcp add npm:@modelcontextprotocol/server-filesystem
+nvmcp add github:my-org/debug-mcp
 
-# Create production profile  
-nvmcp config prod-server --tag=production
+# Set up production
+nvmcp use production  
+nvmcp add npm:@modelcontextprotocol/server-filesystem
+nvmcp add github:my-org/analytics-mcp
 
 # Switch between environments
-nvmcp use development --cursor
+nvmcp use development --start
 nvmcp use production --claude
-```
-
-### GitHub Installation
-
-```bash
-# Install from GitHub
-nvmcp install --repo=github:user/custom-mcp-server
-
-# Install specific branch/tag
-nvmcp install --repo=github:user/server --tag=v2.0
-
-# Update from GitHub
-nvmcp update github-server
 ```
 
 ## Development
@@ -359,9 +311,11 @@ nvmcp update github-server
 nvmcp/
 ├── lib/
 │   ├── commands/       # CLI command implementations
-│   ├── utils/         # Utility modules  
+│   │   └── tags.js     # Tag-based commands
+│   ├── utils/         # Utility modules
+│   ├── constants/     # Application constants
 │   ├── cli.js         # Argument parsing
-│   └── index.js       # Main entry point
+│   └── main.js        # Main entry point
 ├── bin/
 │   └── nvmcp          # Executable binary
 └── test/

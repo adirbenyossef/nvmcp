@@ -1,7 +1,7 @@
 {
   "name": "nvmcp",
   "version": "1.0.0",
-  "description": "Node Version Manager for Model Context Protocol (MCP) - A lightweight package manager for MCP servers and clients",
+  "description": "Simple tag-based MCP management CLI - Install, configure, and manage Model Context Protocol servers",
   "main": "lib/main.js",
   "bin": {
     "nvmcp": "bin/nvmcp"

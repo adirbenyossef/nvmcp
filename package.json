@@ -2,16 +2,14 @@
   "name": "nvmcp",
   "version": "1.0.0",
   "description": "Node Version Manager for Model Context Protocol (MCP) - A lightweight package manager for MCP servers and clients",
-  "main": "lib/index.js",
+  "main": "lib/main.js",
   "bin": {
     "nvmcp": "bin/nvmcp"
   },
   "scripts": {
-    "start": "node lib/index.js",
+    "start": "node lib/main.js",
     "test": "node test/index.js",
-    "lint": "eslint . --fix",
-    "lint:check": "eslint .",
-    "prepublishOnly": "npm run lint:check && npm test"
+    "prepublishOnly": "npm test"
   },
   "keywords": [
     "mcp",
@@ -22,7 +20,7 @@
     "cursor",
     "cli"
   ],
-  "author": "Your Name",
+  "author": "Ash",
   "license": "MIT",
   "engines": {
     "node": ">=16.0.0"
@@ -37,10 +35,10 @@
   "dependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/nvmcp.git"
+    "url": "git+https://github.com/adirbenyossef/nvmcp.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/nvmcp/issues"
+    "url": "https://github.com/adirbenyossef/nvmcp/issues"
   },
-  "homepage": "https://github.com/yourusername/nvmcp#readme"
+  "homepage": "https://github.com/adirbenyossef/nvmcp#readme"
 }

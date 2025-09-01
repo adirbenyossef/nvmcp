@@ -405,24 +405,20 @@ nvmcp is built with **zero external dependencies** for maximum reliability and s
 
 ## License
 
-MIT © [Your Name]
+MIT © [Ash]
 
 ## Support
 
-- 📖 [Documentation](https://github.com/yourusername/nvmcp)
-- 🐛 [Issue Tracker](https://github.com/yourusername/nvmcp/issues)
-- 💬 [Discussions](https://github.com/yourusername/nvmcp/discussions)
+- 📖 [Documentation](https://github.com/adirbenyossef/nvmcp)
+- 🐛 [Issue Tracker](https://github.com/adirbenyossef/nvmcp/issues)
+- 💬 [Discussions](https://github.com/adirbenyossef/nvmcp/discussions)
 
 ## Roadmap
 
 - [ ] Plugin system for custom tools
-- [ ] Server marketplace/registry  
 - [ ] Configuration sharing
 - [ ] Auto-update mechanism
 - [ ] Web UI for server management
 - [ ] Docker support
 - [ ] CI/CD integrations
 
----
-
-Made with ❤️ for the MCP ecosystem

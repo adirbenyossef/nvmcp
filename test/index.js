@@ -6,7 +6,7 @@ const os = require('os');
 const { parseArgs } = require('../lib/cli');
 const { colors } = require('../lib/utils/colors');
 const { encrypt, decrypt, isSensitiveKey } = require('../lib/utils/crypto');
-const { getConfig, saveConfig } = require('../lib/utils/config');
+const { getConfig} = require('../lib/utils/config');
 
 console.log(colors.cyan('Running nvmcp tests...\n'));
 
@@ -62,12 +62,12 @@ test('Colors - format status', () => {
 test('Crypto - encrypt and decrypt', () => {
   const plaintext = 'secret message';
   const password = 'test-password';
-  
+
   const encrypted = encrypt(plaintext, password);
   assert.ok(encrypted.encrypted);
   assert.ok(encrypted.salt);
   assert.ok(encrypted.iv);
-  
+
   const decrypted = decrypt(encrypted, password);
   assert.strictEqual(decrypted, plaintext);
 });
@@ -91,11 +91,11 @@ test('Config - default configuration', () => {
 
 test('HTTP client - URL validation', () => {
   const { URL } = require('url');
-  
+
   assert.doesNotThrow(() => {
     new URL('https://example.com');
   });
-  
+
   assert.throws(() => {
     new URL('invalid-url');
   });
@@ -103,11 +103,11 @@ test('HTTP client - URL validation', () => {
 
 test('Package spec parsing', () => {
   const { parsePackageSpec } = require('../lib/cli');
-  
+
   const npmPackage = parsePackageSpec('my-package');
   assert.strictEqual(npmPackage.type, 'npm');
   assert.strictEqual(npmPackage.name, 'my-package');
-  
+
   const githubPackage = parsePackageSpec('github:user/repo');
   assert.strictEqual(githubPackage.type, 'github');
   assert.strictEqual(githubPackage.owner, 'user');
@@ -139,9 +139,9 @@ test('Table formatting', () => {
 test('Environment variable handling', () => {
   const originalEnv = process.env.TEST_VAR;
   process.env.TEST_VAR = 'test-value';
-  
+
   assert.strictEqual(process.env.TEST_VAR, 'test-value');
-  
+
   if (originalEnv !== undefined) {
     process.env.TEST_VAR = originalEnv;
   } else {
@@ -153,29 +153,29 @@ test('Path operations', () => {
   const testPath = path.join(os.homedir(), '.nvmcp', 'test');
   const parentDir = path.dirname(testPath);
   const basename = path.basename(testPath);
-  
+
   assert.ok(parentDir.includes('.nvmcp'));
   assert.strictEqual(basename, 'test');
 });
 
 test('File system operations', () => {
   const tempDir = path.join(os.tmpdir(), 'nvmcp-test');
-  
+
   if (!fs.existsSync(tempDir)) {
     fs.mkdirSync(tempDir, { recursive: true });
   }
-  
+
   assert.ok(fs.existsSync(tempDir));
-  
+
   const testFile = path.join(tempDir, 'test.json');
   const testData = { test: 'data' };
-  
+
   fs.writeFileSync(testFile, JSON.stringify(testData));
   assert.ok(fs.existsSync(testFile));
-  
+
   const readData = JSON.parse(fs.readFileSync(testFile, 'utf8'));
   assert.deepStrictEqual(readData, testData);
-  
+
   fs.rmSync(tempDir, { recursive: true, force: true });
 });
 

@@ -9,7 +9,9 @@
   "scripts": {
     "start": "node lib/main.js",
     "test": "node test/index.js",
-    "prepublishOnly": "npm test"
+    "lint": "eslint lib/ test/ --fix",
+    "lint:check": "eslint lib/ test/",
+    "prepublishOnly": "npm run lint:check && npm test"
   },
   "keywords": [
     "mcp",
@@ -31,7 +33,9 @@
     "README.md",
     "LICENSE"
   ],
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  },
   "dependencies": {},
   "repository": {
     "type": "git",

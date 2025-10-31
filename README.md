@@ -24,16 +24,41 @@ Simple tag-based MCP management CLI. Install, configure, and manage Model Contex
 npm install -g nvmcp
 ```
 
-### Create your first tag and add an MCP
+### Option 1: Interactive Setup (Recommended for first-time users)
+
+```bash
+# Run the interactive setup wizard
+nvmcp init
+```
+
+The wizard will guide you through:
+1. Creating your first tag
+2. Adding popular MCPs (WhatsApp, filesystem, etc.)
+3. Exporting configuration to Claude Desktop, Cursor, or VS Code
+
+### Option 2: Quick Start with Presets
+
+```bash
+# Quick setup with WhatsApp + common MCPs
+nvmcp quickstart whatsapp-dev --claude
+
+# Or choose from other presets
+nvmcp quickstart full-stack    # Filesystem, GitHub, Postgres, Memory
+nvmcp quickstart minimal       # Just filesystem
+```
+
+### Option 3: Manual Setup
 
 ```bash
 # Create a development tag
 nvmcp create development
 
-# Add an MCP from npm
-nvmcp add npm:@modelcontextprotocol/server-filesystem
+# Add MCPs using preset names (easy!)
+nvmcp add whatsapp
+nvmcp add filesystem
 
-# Add an MCP from GitHub
+# Or use full source paths
+nvmcp add npm:@modelcontextprotocol/server-filesystem
 nvmcp add github:lharries/whatsapp-mcp
 
 # Start the MCPs
@@ -43,7 +68,56 @@ nvmcp start
 nvmcp use development --claude
 ```
 
+### View Available Presets
+
+```bash
+# See all available MCP presets
+nvmcp presets
+```
+
 ## Commands
+
+### Quick Start Commands
+
+#### `nvmcp init`
+Interactive setup wizard for first-time users.
+
+```bash
+nvmcp init
+```
+
+Guides you through:
+- Creating your first tag
+- Selecting popular MCPs (WhatsApp, filesystem, etc.)
+- Exporting to Claude Desktop, Cursor, or VS Code
+
+#### `nvmcp quickstart [preset]`
+Quick setup with predefined MCP combinations.
+
+```bash
+nvmcp quickstart whatsapp-dev    # WhatsApp + filesystem + memory
+nvmcp quickstart full-stack      # Filesystem + GitHub + Postgres + memory
+nvmcp quickstart minimal         # Just filesystem
+nvmcp quickstart custom          # Choose your own
+
+# With options
+nvmcp quickstart whatsapp-dev --start --claude
+```
+
+#### `nvmcp presets`
+Show all available MCP presets.
+
+```bash
+nvmcp presets
+```
+
+Available presets:
+- **whatsapp** - WhatsApp messaging integration
+- **filesystem** - File system access and operations
+- **github** - GitHub repository integration
+- **slack** - Slack workspace integration
+- **memory** - Persistent memory storage
+- **postgres** - PostgreSQL database integration
 
 ### Tag Management
 
@@ -90,9 +164,18 @@ nvmcp delete old-tag
 Add an MCP to the active tag.
 
 ```bash
+# Using preset names (easiest!)
+nvmcp add whatsapp
+nvmcp add filesystem
+nvmcp add github
+
+# Using full sources
 nvmcp add npm:@modelcontextprotocol/server-filesystem
 nvmcp add github:lharries/whatsapp-mcp
 nvmcp add https://example.com/mcp-server
+
+# Auto-start after adding
+nvmcp add whatsapp --start
 ```
 
 #### `nvmcp remove <mcp-name>`
